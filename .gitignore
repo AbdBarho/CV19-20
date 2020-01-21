@@ -2,3 +2,4 @@
 output/
 gifs/
 data/
+__pycache__
