@@ -31,6 +31,7 @@ class Body(object):
         heatmap_avg = np.zeros((oriImg.shape[0], oriImg.shape[1], 19))
         paf_avg = np.zeros((oriImg.shape[0], oriImg.shape[1], 38))
 
+        pafs, pcms = [], []
         for m in range(len(multiplier)):
             scale = multiplier[m]
             imageToTest = cv2.resize(oriImg, (0, 0), fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
@@ -63,6 +64,9 @@ class Body(object):
 
             heatmap_avg += heatmap_avg + heatmap / len(multiplier)
             paf_avg += + paf / len(multiplier)
+            
+            pafs.append(paf)
+            pcms.append(heatmap)
 
         all_peaks = []
         peak_counter = 0
@@ -204,7 +208,7 @@ class Body(object):
 
         # subset: n*20 array, 0-17 is the index in candidate, 18 is the total score, 19 is the total parts
         # candidate: x, y, score, id
-        return candidate, subset
+        return candidate, subset, np.array(pafs), np.array(pcms)
 
 if __name__ == "__main__":
     body_estimation = Body('../model/body_pose_model.pth')
